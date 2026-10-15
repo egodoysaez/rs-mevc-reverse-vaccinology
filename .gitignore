@@ -1,0 +1,34 @@
+# Datos y resultados pesados
+data/*.fasta
+data/*.faa
+data/*.pdb
+data/*.csv
+results/*.png
+results/*.pdf
+results/*.csv
+
+# Entornos
+.venv/
+venv/
+env/
+__pycache__/
+*.pyc
+.Rhistory
+.RData
+.Rproj.user/
+
+# Sistema
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Credenciales
+*.key
+*.token
+.env
+
+# Notebooks
+.ipynb_checkpoints/
+
+# Notas personales
+Estructura carpeta.txt
