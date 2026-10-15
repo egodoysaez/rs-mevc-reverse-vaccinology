@@ -39,6 +39,7 @@ See `workflow.png` and `docs/` for details.
 10. Multi-epitope construct design.
 
 ## Repository structure
+```text
 .
 ├── README.md
 ├── LICENSE
@@ -50,7 +51,7 @@ See `workflow.png` and `docs/` for details.
 ├── notebooks/
 ├── data/
 └── results/
-
+```
 
 ## Requirements
 
@@ -68,6 +69,7 @@ bash scripts/01_download_proteomes.sh
 python scripts/02_filter_localization.py
 python scripts/03_predict_epitopes.py
 python scripts/04_assemble_construct.py
+```
 
 ## Data
 
