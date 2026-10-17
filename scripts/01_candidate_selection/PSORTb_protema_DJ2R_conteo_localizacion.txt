@@ -1,6 +1,0 @@
-Final_Localization	Count
-Cytoplasmic	1331
-CytoplasmicMembrane	885
-Unknown	636
-Extracellular	59
-Cellwall	14

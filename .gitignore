@@ -3,9 +3,12 @@ data/*.fasta
 data/*.faa
 data/*.pdb
 data/*.csv
+data/*.txt
 results/*.png
 results/*.pdf
 results/*.csv
+scripts/*.txt
+scripts/*.faa
 
 # Entornos
 .venv/
