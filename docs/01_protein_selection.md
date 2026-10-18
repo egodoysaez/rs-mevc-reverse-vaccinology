@@ -108,3 +108,39 @@ The pipeline uses two scripts located in `scripts/01_candidate_selection/`:
         -e 1e-15 \
         -p 35
     ```
+
+## 4. Essentiality analysis (DEG)
+
+Proteins that passed the VFDB screening were further filtered to identify those encoded by essential genes, using the Database of Essential Genes (DEG).
+
+### 4.1. Requirements
+
+- **DEG Dataset**:
+  1. Go to the DEG download page: https://tubic.org/deg/public/index.php/download
+  2. Download the **Bacteria -> amino acid** dataset (e.g., `DEG10.aa`).
+  3. Place it in the working directory.
+
+### 4.2. Execution
+
+The workflow uses three scripts located in `scripts/01_candidate_selection/`:
+
+1. `07_deg_prepare_sequences.py` - Extracts the FASTA sequences of the previously identified virulent proteins from the original proteome, creating the query files for BLAST.
+   
+   ```bash
+   python scripts/01_candidate_selection/07_deg_prepare_sequences.py \
+       -f Proteoma_referencia.faa \
+       -i VFDB_proteoma_referencia_proteinas_virulentas_e-15.txt \
+       -o DEG_proteoma_referencia_secuencias_virulentas_2.txt
+    ```
+2. `08_deg_blast.sh` - Automates the creation of the DEG BLAST database and runs `blastp`for the three strains.
+
+    ```bash
+    bash scripts/01_candidate_selection/08_deg_blast.sh
+    ```
+3. `09_deg_analyze.py`- Filters the BLASTp results (identity ≥ 35%, E-value < 1e-15) and extracts the unique essential protein IDs.
+
+    ```bash
+    python scripts/01_candidate_selection/09_deg_analyze.py \
+        -i DEG_proteoma_referencia_resultado_BLASTp.txt \
+        -o DEG_proteoma_referencia_proteinas_esenciales_2.txt
+    ```

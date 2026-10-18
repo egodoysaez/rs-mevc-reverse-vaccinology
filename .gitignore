@@ -11,6 +11,7 @@ results/*.csv
 scripts/**/*.txt
 scripts/**/*.faa
 scripts/**/*.fas
+scripts/**/*.aa
 
 # Entornos
 .venv/
