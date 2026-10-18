@@ -95,7 +95,7 @@ The pipeline uses two scripts located in `scripts/01_candidate_selection/`:
 1. `05_vfdb_blast.sh`- Creates the BLAST database (if it doesn't exist) and runs `blastp`for all the strains against the VFDB core dataset.
 
     ```bash
-bash scripts/01_candidate_selection/05_vfdb_blast.sh
+    bash scripts/01_candidate_selection/05_vfdb_blast.sh
     ```
 **Note**: This script assumes the query files (`secuencias_proteoma_<strain>_TODAS_localizaciones.txt`) are in the same directory where the script is executed.
 

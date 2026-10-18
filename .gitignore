@@ -4,11 +4,13 @@ data/*.faa
 data/*.pdb
 data/*.csv
 data/*.txt
+data/*.fas
 results/*.png
 results/*.pdf
 results/*.csv
-scripts/*.txt
-scripts/*.faa
+scripts/**/*.txt
+scripts/**/*.faa
+scripts/**/*.fas
 
 # Entornos
 .venv/
