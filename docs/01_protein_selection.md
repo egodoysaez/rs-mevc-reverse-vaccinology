@@ -144,3 +144,46 @@ The workflow uses three scripts located in `scripts/01_candidate_selection/`:
         -i DEG_proteoma_referencia_resultado_BLASTp.txt \
         -o DEG_proteoma_referencia_proteinas_esenciales_2.txt
     ```
+
+## 5. Host homology filtering
+
+To minimize the risk of cross-reactivity, the essential proteins identified in the previous step were screened against the host proteome (*Salmo salar*).
+
+### 5.1. Requirements
+
+- **NCBI BLASTp (Web Server)**: This step is performed online using the NCBI BLAST service.
+https://blast.ncbi.nlm.nih.gov/Blast.cgi?PROGRAM=blastp&PAGE_TYPE=BlastSearch
+
+### 5.2. Execution
+
+The workflow requires two manual steps on the NCBI server followed by a local script execution:
+
+1. **Online BLASTp submission**:
+   - Open the NCBI BLASTp web page.
+   - Paste the FASTA sequences of the essential proteins (or upload the FASTA file) into the query box.
+   - Set the database to **`nr` (Non-redundant protein sequences)**.
+   - In the "Organism" field, type and select **`Salmo salar (taxid:8030)`**.
+   - Click **BLAST** and wait for the results.
+   - Once finished, click **"Download All"** and save the results in **Text** format. 
+   - Rename the downloaded file to match the pipeline convention: `Homologia_proteoma_referencia_resultado_BLASTp_nr_2.txt`.
+     Repeat this process for the `H2` and `DJ2R` strains.
+
+2. **Local filtering script**: 
+   Run the `10_host_homology_analyze.py` script to parse the downloaded NCBI text file and identify proteins with no significant homology to the host.
+
+    ```bash
+    python scripts/01_candidate_selection/10_host_homology_analyze.py \
+       -b Homologia_proteoma_referencia_resultado_BLASTp_nr_2.txt \
+       -i DEG_proteoma_referencia_proteinas_esenciales_2.txt \
+       -o Homologia_proteoma_referencia_SinHomologia_nr_2.txt
+    ```
+
+### 5.3. Filtering rule
+
+The script evaluates the BLAST results based on the following custom logic to ensure only non-homologous proteins are retained:
+
+ - Keep if the protein has 0 hits (NCBI found no matches in the host proteome).
+
+ - Keep if the protein has hits, but ALL of them have an identity < 25%, AND at least one hit has an E-value < 1e-15 (confirming a significant alignment).
+
+ - Discard if any hit has an identity ≥ 25% (indicating potential cross-reactivity with the host).
