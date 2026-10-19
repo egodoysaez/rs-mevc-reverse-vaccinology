@@ -159,19 +159,19 @@ https://blast.ncbi.nlm.nih.gov/Blast.cgi?PROGRAM=blastp&PAGE_TYPE=BlastSearch
 The workflow requires two manual steps on the NCBI server followed by a local script execution:
 
 1. **Online BLASTp submission**:
-   - Open the NCBI BLASTp web page.
-   - Paste the FASTA sequences of the essential proteins (or upload the FASTA file) into the query box.
-   - Set the database to **`nr` (Non-redundant protein sequences)**.
-   - In the "Organism" field, type and select **`Salmo salar (taxid:8030)`**.
-   - Click **BLAST** and wait for the results.
-   - Once finished, click **"Download All"** and save the results in **Text** format. 
-   - Rename the downloaded file to match the pipeline convention: `Homologia_proteoma_referencia_resultado_BLASTp_nr_2.txt`.
+   1. Open the NCBI BLASTp web page.
+   2. Paste the FASTA sequences of the essential proteins (or upload the FASTA file) into the query box.
+   3. Set the database to **`nr` (Non-redundant protein sequences)**.
+   4. In the "Organism" field, type and select **`Salmo salar (taxid:8030)`**.
+   5. Click **BLAST** and wait for the results.
+   6. Once finished, click **"Download All"** and save the results in **Text** format. 
+   7. Rename the downloaded file to match the pipeline convention: `Homologia_proteoma_referencia_resultado_BLASTp_nr_2.txt`.
      Repeat this process for the `H2` and `DJ2R` strains.
 
 2. **Local filtering script**: 
    Run the `10_host_homology_analyze.py` script to parse the downloaded NCBI text file and identify proteins with no significant homology to the host.
 
-    ```bash
+    ```
     python scripts/01_candidate_selection/10_host_homology_analyze.py \
        -b Homologia_proteoma_referencia_resultado_BLASTp_nr_2.txt \
        -i DEG_proteoma_referencia_proteinas_esenciales_2.txt \
@@ -183,7 +183,43 @@ The workflow requires two manual steps on the NCBI server followed by a local sc
 The script evaluates the BLAST results based on the following custom logic to ensure only non-homologous proteins are retained:
 
  - Keep if the protein has 0 hits (NCBI found no matches in the host proteome).
-
  - Keep if the protein has hits, but ALL of them have an identity < 25%, AND at least one hit has an E-value < 1e-15 (confirming a significant alignment).
-
  - Discard if any hit has an identity ≥ 25% (indicating potential cross-reactivity with the host).
+
+## 6. Transmembrane domain prediction (TMHMM)
+
+Proteins with zero or one transmembrane (TM) domain are ideal for vaccine development. Proteins with multiple TM domains were excluded.
+
+### 6.1. Sequence extraction
+
+### 6.1. Sequence extraction
+
+First, extract the FASTA sequences of the proteins that passed the host homology filtering.
+
+```
+python scripts/01_candidate_selection/11_tmhmm_prepare_sequences.py \
+    -f Proteoma_referencia.faa \
+    -i Homologia_proteoma_referencia_SinHomologia_nr_2.txt \
+    -o TMHMM_proteoma_referencia_secuencias_SinHomologia_2.txt
+```
+
+### 6.2. TMHMM web server execution
+
+The analysis is performed on the DTU Health Tech TMHMM server.
+
+1. Go to the TMHMM-2.0 server: https://services.healthtech.dtu.dk/service.php?TMHMM-2.0
+2. Upload the generated FASTA file.
+3. In the Output format section, select "One line per protein".
+4. Click Submit.
+5. Once the results are ready, copy the text output and save it as `TMHMM_proteoma_referencia_resultado_2.txt`.
+
+### 6.3. Filtering results
+
+The script `12_tmhmm_analyze.py` parses the TMHMM output and retains proteins with 0 transmembrane domains (PredHel=0), which represent the optimal candidates.
+
+    ```
+    python scripts/01_candidate_selection/12_tmhmm_analyze.py \
+        -i TMHMM_proteoma_referencia_resultado_2.txt \
+        -o0 TMHMM_proteoma_referencia_0TM_secretadas_2.txt \
+        -o1 TMHMM_proteoma_referencia_0-1TM_accesibles_2.txt
+    ```
