@@ -217,9 +217,47 @@ The analysis is performed on the DTU Health Tech TMHMM server.
 
 The script `12_tmhmm_analyze.py` parses the TMHMM output and retains proteins with 0 transmembrane domains (PredHel=0), which represent the optimal candidates.
 
-    ```
+```
     python scripts/01_candidate_selection/12_tmhmm_analyze.py \
         -i TMHMM_proteoma_referencia_resultado_2.txt \
         -o0 TMHMM_proteoma_referencia_0TM_secretadas_2.txt \
-        -o1 TMHMM_proteoma_referencia_0-1TM_accesibles_2.txt
-    ```
+        -o1 TMHMM_proteoma_referencia_0-1TM_accesibles_2.txt (optional)
+```
+
+## 7. Antigenicity prediction (VaxiJen)
+
+Proteins with 0 transmembrane domains were subjected to antigenicity prediction using the VaxiJen v2.0 server. Proteins with a score equal to or greater than 0.4 were considered probable antigens.
+
+### 7.1. Sequence extraction
+
+First, extract the FASTA sequences of the proteins with 0 TM domains.
+
+```
+python scripts/01_candidate_selection/13_vaxijen_prepare_sequences.py \
+    -f Proteoma_referencia.faa \
+    -i TMHMM_proteoma_referencia_0TM_secretadas_2.txt \
+    -o Antigenicidad_proteoma_referencia_secuencias_0TM_2.txt
+```
+
+### 7.2. VaxiJen web server execution
+
+The analysis is performed on the VaxiJen v2.0 server.
+
+1. Go to the VaxiJen server: http://www.ddg-pharmfac.net/vaxijen/VaxiJen/VaxiJen.html
+2. Upload the preparated FASTA file.
+3. Set the Target organism to Bacteria.
+4. In the Output format section, select "Sequence Output".
+5. Click Submit.
+6. Once the results are ready, copy the text output and save it.
+
+### 7.3. Filtering results
+
+The script `14_vaxijen_analyze.py` parses the output, retains proteins with a score >= 0.4, and sorts them by their antigenicity score.
+
+```
+python scripts/01_candidate_selection/14_vaxijen_analyze.py \
+    -i Antigenicidad_proteoma_referencia_resultado_VaxiJen_2.txt \
+    -o Antigenicidad_proteoma_referencia_antigenicas_2.txt \
+    -s Antigenicidad_proteoma_referencia_antigenicas_ordenadas_2.txt \
+    -t 0.4
+```
