@@ -1,0 +1,25 @@
+#!/bin/bash
+# Template environment setup for NetMHCpan 4.1b (RS-MEVC pipeline).
+#
+# Usage:
+#   1. Copy to a local path outside the repo:
+#          cp scripts/setup/netmhcpan_setup.sh.example ~/netmhcpan_setup.sh
+#   2. Edit NETMHCPAN_HOME below.
+#   3. Source it before running the MHC-I pipeline:
+#          source ~/netmhcpan_setup.sh
+#
+# Not required by the pipeline itself: 01_pipeline_netmhcpan.py receives
+# --netmhcpan-bin and --nmhome explicitly. Provided as a convenience.
+
+# >>> EDIT THIS LINE <<<
+export NETMHCPAN_HOME="/path/to/netMHCpan-4.1"
+
+export NETMHCpan="$NETMHCPAN_HOME"
+export TMPDIR="$NETMHCPAN_HOME/tmp"
+export PATH="$NETMHCPAN_HOME/bin:$PATH"
+
+mkdir -p "$TMPDIR"
+
+echo "NetMHCpan environment ready:"
+echo "  NETMHCPAN_HOME = $NETMHCPAN_HOME"
+echo "  TMPDIR         = $TMPDIR"

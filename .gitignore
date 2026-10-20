@@ -36,5 +36,9 @@ desktop.ini
 # Notebooks
 .ipynb_checkpoints/
 
-# Notas personales
+# Personal notes
 Estructura carpeta.txt
+
+#Personalized environment setup files (copied from scripts/setup/*.example)
+netmhcpan_setup.sh
+netmhciipan_setup.sh

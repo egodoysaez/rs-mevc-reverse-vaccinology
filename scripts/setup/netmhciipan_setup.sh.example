@@ -1,0 +1,25 @@
+#!/bin/bash
+# Template environment setup for NetMHCIIpan 4.3i (RS-MEVC pipeline).
+#
+# Usage:
+#   1. Copy this file to a local path outside the repo:
+#          cp scripts/setup/netmhciipan_setup.sh.example ~/netmhciipan_setup.sh
+#   2. Edit NETMHCIIPAN_HOME below.
+#   3. Source it before running the MHC-II pipeline:
+#          source ~/netmhciipan_setup.sh
+#
+# Not required by the pipeline itself: 05_pipeline_netmhciipan.py receives
+# the binary path via --netmhciipan-bin. Provided as a convenience.
+
+# >>> EDIT THIS LINE <<<
+export NETMHCIIPAN_HOME="/path/to/netMHCIIpan-4.3"
+
+export NETMHCIIpan="$NETMHCIIPAN_HOME"
+export TMPDIR="$NETMHCIIPAN_HOME/tmp"
+export PATH="$NETMHCIIPAN_HOME/bin:$PATH"
+
+mkdir -p "$TMPDIR"
+
+echo "netMHCIIpan environment ready:"
+echo "  NETMHCIIPAN_HOME = $NETMHCIIPAN_HOME"
+echo "  TMPDIR           = $TMPDIR"

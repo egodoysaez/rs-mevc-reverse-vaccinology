@@ -18,7 +18,7 @@ Caveat
 `SCORE_CUTOFF = 0.3` was present in the original and logged as a
 Score_EL filter, but it is not actually used to filter results: the real
 filter is `Num_DAA_DAB_Pairs >= 3`. It is kept here only for reference;
-the final ranking used in the paper comes from `03_epitope_promiscuity.py`.
+the final ranking used in the paper comes from `06_epitope_promiscuity.py`.
 
 The final analysis is documented in docs/02_epitope_prediction.md.
 """
