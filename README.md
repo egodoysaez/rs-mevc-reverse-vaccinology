@@ -62,14 +62,49 @@ See `workflow.png` and `docs/` for details.
 
 ## Usage
 
+## Usage
+
+The full pipeline is documented step-by-step in `docs/01_protein_selection.md`. 
+All scripts for the candidate selection phase are located in 
+`scripts/01_candidate_selection/`.
+
+A typical execution for one strain (e.g., the reference) would be:
+
 ```bash
-conda env create -f environment.yml
-conda activate rs-mevc
-bash scripts/01_download_proteomes.sh
-python scripts/02_filter_localization.py
-python scripts/03_predict_epitopes.py
-python scripts/04_assemble_construct.py
+# 1. Subcellular localization post-processing
+python scripts/01_candidate_selection/01_psortb_count.py -i PSORTb_proteoma_referencia.txt -o ...
+python scripts/01_candidate_selection/02_psortb_split.py -i PSORTb_proteoma_referencia.txt -s referencia
+python scripts/01_candidate_selection/03_psortb_extract_sequences.py -f data/Proteoma_referencia.faa -s referencia
+python scripts/01_candidate_selection/04_psortb_merge_localizations.py -s referencia -o ...
+
+# 2. Virulence factor screening (VFDB)
+bash scripts/01_candidate_selection/05_vfdb_blast.sh
+python scripts/01_candidate_selection/06_vfdb_analyze.py -i VFDB_proteoma_referencia_resultados_BLASTp.txt ...
+
+# 3. Essentiality analysis (DEG)
+python scripts/01_candidate_selection/07_deg_prepare_sequences.py -f data/Proteoma_referencia.faa ...
+bash scripts/01_candidate_selection/08_deg_blast.sh
+python scripts/01_candidate_selection/09_deg_analyze.py -i DEG_proteoma_referencia_resultado_BLASTp.txt ...
+
+# 4. Host homology filtering
+python scripts/01_candidate_selection/10_host_homology_analyze.py -b Homologia_proteoma_referencia_resultado_BLASTp_nr_2.txt ...
+
+# 5. Transmembrane domain prediction (TMHMM)
+python scripts/01_candidate_selection/11_tmhmm_prepare_sequences.py -f data/Proteoma_referencia.faa ...
+python scripts/01_candidate_selection/12_tmhmm_analyze.py -i TMHMM_proteoma_referencia_resultado_2.txt ...
+
+# 6. Antigenicity prediction (VaxiJen)
+python scripts/01_candidate_selection/13_vaxijen_prepare_sequences.py -f data/Proteoma_referencia.faa ...
+python scripts/01_candidate_selection/14_vaxijen_analyze.py -i Antigenicidad_proteoma_referencia_resultado_VaxiJen_2.txt ...
+
+# 7. Consensus selection
+python scripts/01_candidate_selection/15_consensus_compare.py --ref ... --dj2r ... --h2 ... -o ...
+
+# 8. Top 15 antigenic proteins
+python scripts/01_candidate_selection/16_get_top15.py -c Proteoma_proteinas_candidatas_R_salmoninarum_2.txt ...
 ```
+
+**Note**: Steps that require web servers (PSORTb, TMHMM, VaxiJen, BLASTp on NCBI) must be performed manually as described in `docs/01_protein_selection.md` before running the post-processing scripts.
 
 ## Data
 

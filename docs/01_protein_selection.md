@@ -21,6 +21,8 @@ Files were renamed to:
 
 These files are **not** included in the repository. See `data/README.md` for download instructions.
 
+This files must be on the working directory in order to work.
+
 ## 2. Subcellular localization (PSORTb v3.0)
 
 Subcellular localization was predicted for each proteome using the PSORTb v3.0 web server (https://www.psort.org/psortb/).
@@ -85,7 +87,7 @@ https://blast.ncbi.nlm.nih.gov/doc/blast-help/downloadblastdata.html
 
 - **VFDB Core Dataset**:
     1. Go to the VFDB download page: https://www.mgc.ac.cn/VFs/download.htm
-    2. Download the "VFDB core dataser (setA)" in FASTA format.
+    2. Download the "VFDB core dataset (setA)" in FASTA format.
     3. Decompress the file (e.g., `gunzip VFDB_setA_pro.fas.gz`) and place it in the working directory as `VFDB_setA_pro.fas`.
 
 ### 3.2. Execution
@@ -189,8 +191,6 @@ The script evaluates the BLAST results based on the following custom logic to en
 ## 6. Transmembrane domain prediction (TMHMM)
 
 Proteins with zero or one transmembrane (TM) domain are ideal for vaccine development. Proteins with multiple TM domains were excluded.
-
-### 6.1. Sequence extraction
 
 ### 6.1. Sequence extraction
 
