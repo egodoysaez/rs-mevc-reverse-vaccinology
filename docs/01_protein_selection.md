@@ -218,10 +218,10 @@ The analysis is performed on the DTU Health Tech TMHMM server.
 The script `12_tmhmm_analyze.py` parses the TMHMM output and retains proteins with 0 transmembrane domains (PredHel=0), which represent the optimal candidates.
 
 ```
-    python scripts/01_candidate_selection/12_tmhmm_analyze.py \
-        -i TMHMM_proteoma_referencia_resultado_2.txt \
-        -o0 TMHMM_proteoma_referencia_0TM_secretadas_2.txt \
-        -o1 TMHMM_proteoma_referencia_0-1TM_accesibles_2.txt (optional)
+python scripts/01_candidate_selection/12_tmhmm_analyze.py \
+    -i TMHMM_proteoma_referencia_resultado_2.txt \
+    -o0 TMHMM_proteoma_referencia_0TM_secretadas_2.txt \
+    -o1 TMHMM_proteoma_referencia_0-1TM_accesibles_2.txt (optional)
 ```
 
 ## 7. Antigenicity prediction (VaxiJen)
@@ -261,3 +261,28 @@ python scripts/01_candidate_selection/14_vaxijen_analyze.py \
     -s Antigenicidad_proteoma_referencia_antigenicas_ordenadas_2.txt \
     -t 0.4
 ```
+
+## 8. Consensus selection
+
+To ensure the vaccine candidate is highly conserved across different strains of *R. salmoninarum*, the antigenic proteins from the three proteomes were compared to identify the consensus.
+
+```
+python scripts/01_candidate_selection/15_consensus_compare.py \
+    --ref Antigenicidad_proteoma_referencia_antigenicas_ordenadas_2.txt \
+    --dj2r Antigenicidad_proteoma_DJ2R_antigenicas_ordenadas_2.txt \
+    --h2 Antigenicidad_proteoma_H2_antigenicas_ordenadas_2.txt \
+    -o Proteoma_proteinas_candidatas_R_salmoninarum_2.txt
+```
+
+## 9. Top 15 antigenic proteins selection
+
+The top 15 most antigenic proteins were extracted and formatted as a FASTA file to be used for epitope prediction. The FASTA headers include the VaxiJen score for traceability.
+
+```
+python scripts/01_candidate_selection/16_get_top15.py \
+    -c Proteoma_proteinas_candidatas_R_salmoninarum_2.txt \
+    -v Antigenicidad_proteoma_referencia_antigenicas_ordenadas_2.txt \
+    -o Prediccion_epitopos_TOP15_antigenicas_secuencias_2.txt \
+    -n 15
+```
+
