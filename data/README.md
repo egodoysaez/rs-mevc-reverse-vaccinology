@@ -21,5 +21,12 @@ Place files in this folder before running the scripts.
 
 - VFDB core dataset: http://www.mgc.ac.cn/VFs/
 - DEG 10: https://tubic.org/deg/public/index.php/download
-- IPD MHC (fish): https://www.ebi.ac.uk/ipd/mhc/group/FISH/
 - *Salmo salar* proteome: GCF_905237065.1
+
+### MHC allele sequences (IPD-MHC)
+
+Download from https://www.ebi.ac.uk/ipd/mhc/group/FISH/:
+
+- **Sasa-UBA** (MHC-I) → `Download → Protein FASTA` (48 alleles) → save as `Sasa_UBA.txt`.
+
+Place the file in the working directory. It is **not tracked** in the repository.

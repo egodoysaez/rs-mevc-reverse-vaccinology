@@ -62,8 +62,6 @@ See `workflow.png` and `docs/` for details.
 
 ## Usage
 
-## Usage
-
 The full pipeline is documented step-by-step in `docs/01_protein_selection.md`. 
 All scripts for the candidate selection phase are located in 
 `scripts/01_candidate_selection/`.
